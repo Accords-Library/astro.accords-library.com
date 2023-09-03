@@ -1,0 +1,11 @@
+---
+import AppLayout from "../../layouts/AppLayout.astro";
+
+const { locale } = Astro.params;
+---
+
+<AppLayout title="Welcome to Astro.">
+  <main slot="subPanel">
+    <h1>Hello {locale}</h1>
+  </main>
+</AppLayout>

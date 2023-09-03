@@ -1,0 +1,23 @@
+{
+  "name": "astro.accords-library.com",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "start": "astro preview",
+    "script:download-payload-sdk": "bun run scripts/download-payload-sdk.ts",
+    "precommit": "npm run script:download-payload-sdk",
+    "middleware": "bun run middleware/server.ts"
+  },
+  "dependencies": {
+    "@astrojs/node": "^6.0.0",
+    "accept-language": "^3.0.18",
+    "astro": "^3.0.3",
+    "hono": "^3.5.7",
+    "node-cache": "^5.1.2"
+  },
+  "devDependencies": {
+    "bun-types": "^0.8.1"
+  }
+}
