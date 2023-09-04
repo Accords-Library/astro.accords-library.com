@@ -15,7 +15,8 @@
     "accept-language": "^3.0.18",
     "astro": "^3.0.3",
     "hono": "^3.5.7",
-    "node-cache": "^5.1.2"
+    "node-cache": "^5.1.2",
+    "sanitize.css": "^13.0.0"
   },
   "devDependencies": {
     "bun-types": "^0.8.1"

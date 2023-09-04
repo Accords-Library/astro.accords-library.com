@@ -14,20 +14,106 @@ const { title } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
   </head>
-  <body>
-    <div></div>
-    <div><slot name="subPanel" /></div>
-    <div><slot name="contentPanel" /></div>
+  <body class="theme-color-dark">
+    <div id="main-panel">
+      <slot name="mainPanel">Main Panel</slot>
+    </div>
+    <div id="sub-panel">
+      <slot name="subPanel">Sub Panel</slot>
+    </div>
+    <div id="menu-panel">Menu Panel</div>
+    <div id="navbar">
+      <button id="open-menu">Open menu</button>
+      <button id="open-sub">Open sub</button>
+    </div>
   </body>
 </html>
+
+<script>
+  const subPanel = document.getElementById("sub-panel");
+  const menuPanel = document.getElementById("menu-panel");
+  const openMenuButton = document.getElementById("open-menu");
+  const subMenuButton = document.getElementById("open-sub");
+
+  openMenuButton?.addEventListener("click", () => {
+    menuPanel?.classList.toggle("opened");
+  });
+
+  subMenuButton?.addEventListener("click", () => {
+    subPanel?.classList.toggle("opened");
+  });
+</script>
 
 <style>
   body {
     display: grid;
-    grid-template-columns: 20rem 20rem 1fr;
+    background-color: rgb(var(--theme-color-light));
+    color: rgb(var(--theme-color-black));
+    inset: 0;
+    position: absolute;
+    overflow: hidden;
 
     & > div {
-      background-color: red;
+      border: 1px solid rgb(var(--theme-color-dark));
+      background-color: rgb(var(--theme-color-light));
+    }
+  }
+
+  @media (max-width: 60rem) {
+    body {
+      grid-template-areas: "main" "navbar";
+      grid-template-rows: 1fr 5rem;
+
+      & > #menu-panel {
+        grid-area: main;
+        transform: translateX(-100%);
+        transition: transform 0.3s;
+      }
+
+      & > #menu-panel.opened {
+        transform: translateX(0%);
+      }
+
+      & > #sub-panel {
+        grid-area: main;
+        transform: translateX(100%);
+        transition: transform 0.3s;
+      }
+
+      & > #sub-panel.opened {
+        transform: translateX(0%);
+      }
+
+      & > #main-panel {
+        grid-area: main;
+      }
+
+      & > #navbar {
+        grid-area: navbar;
+      }
+    }
+  }
+
+  @media (min-width: 60rem) {
+    body {
+      grid-template-columns: 20rem 20rem 1fr;
+      grid-template-areas: "menu sub main";
+
+      & > #menu-panel {
+        grid-area: menu;
+      }
+
+      & > #sub-panel {
+        grid-area: sub;
+      }
+
+      & > #main-panel {
+        grid-area: main;
+      }
+
+      & > #navbar {
+        display: none;
+      }
     }
   }
 </style>

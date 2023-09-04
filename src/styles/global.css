@@ -1,0 +1,17 @@
+.theme-color-light {
+  --theme-color-highlight: 255 241 224;
+  --theme-color-light: 255 237 216;
+  --theme-color-mid: 240 209 179;
+  --theme-color-dark: 156 102 68;
+  --theme-color-shade: 192 132 94;
+  --theme-color-black: 27 24 17;
+}
+
+.theme-color-dark {
+  --theme-color-highlight: 44 40 37;
+  --theme-color-light: 38 34 30;
+  --theme-color-mid: 57 45 34;
+  --theme-color-dark: 192 132 94;
+  --theme-color-shade: 25 25 20;
+  --theme-color-black: 235 234 231;
+}
