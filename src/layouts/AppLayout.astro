@@ -1,4 +1,6 @@
 ---
+import { Icon } from "astro-icon/components";
+
 interface Props {
   title: string;
 }
@@ -18,34 +20,70 @@ const { title } = Astro.props;
     <div id="main-panel">
       <slot name="mainPanel">Main Panel</slot>
     </div>
+    <div id="backdrop"></div>
     <div id="sub-panel">
       <slot name="subPanel">Sub Panel</slot>
     </div>
     <div id="menu-panel">Menu Panel</div>
     <div id="navbar">
-      <button id="open-menu">Open menu</button>
-      <button id="open-sub">Open sub</button>
+      <button id="open-menu">
+        <Icon class="when-off" name="material-symbols:menu" width={24} height={24} />
+        <Icon class="when-on" name="material-symbols:close" width={24} height={24} />
+      </button>
+      {title}
+      <button id="open-sub">
+        <Icon class="when-off" name="material-symbols:tune" width={24} height={24} />
+        <Icon class="when-on" name="material-symbols:close" width={24} height={24} />
+      </button>
     </div>
   </body>
 </html>
 
 <script>
-  const subPanel = document.getElementById("sub-panel");
-  const menuPanel = document.getElementById("menu-panel");
-  const openMenuButton = document.getElementById("open-menu");
-  const subMenuButton = document.getElementById("open-sub");
+  const subPanel = document.querySelector("#sub-panel")!;
+  const menuPanel = document.querySelector("#menu-panel")!;
+  const openMenuButton = document.querySelector("#open-menu")!;
+  const subMenuButton = document.querySelector("#open-sub")!;
+  const backdrop = document.querySelector("#backdrop")!;
 
-  openMenuButton?.addEventListener("click", () => {
-    menuPanel?.classList.toggle("opened");
+  openMenuButton.addEventListener("click", () => {
+    menuPanel.classList.toggle("opened");
+    openMenuButton.classList.toggle("on");
+    subPanel.classList.remove("opened");
+    subMenuButton.classList.remove("on");
+
+    if (menuPanel.classList.contains("opened")) {
+      backdrop.classList.add("on");
+    } else {
+      backdrop.classList.remove("on");
+    }
   });
 
-  subMenuButton?.addEventListener("click", () => {
-    subPanel?.classList.toggle("opened");
+  subMenuButton.addEventListener("click", () => {
+    subPanel.classList.toggle("opened");
+    subMenuButton.classList.toggle("on");
+    menuPanel.classList.remove("opened");
+    openMenuButton.classList.remove("on");
+
+    if (subPanel.classList.contains("opened")) {
+      backdrop.classList.add("on");
+    } else {
+      backdrop.classList.remove("on");
+    }
+  });
+
+  backdrop.addEventListener("click", () => {
+    backdrop.classList.remove("on");
+    subPanel.classList.remove("opened");
+    subMenuButton.classList.remove("on");
+    menuPanel.classList.remove("opened");
+    openMenuButton.classList.remove("on");
   });
 </script>
 
 <style>
   body {
+    --border-style: 1px solid rgb(var(--theme-color-dark) / 0.5);
     display: grid;
     background-color: rgb(var(--theme-color-light));
     color: rgb(var(--theme-color-black));
@@ -54,8 +92,12 @@ const { title } = Astro.props;
     overflow: hidden;
 
     & > div {
-      border: 1px solid rgb(var(--theme-color-dark));
       background-color: rgb(var(--theme-color-light));
+    }
+
+    & > #sub-panel,
+    & > #menu-panel {
+      border-right: var(--border-style);
     }
   }
 
@@ -64,10 +106,15 @@ const { title } = Astro.props;
       grid-template-areas: "main" "navbar";
       grid-template-rows: 1fr 5rem;
 
-      & > #menu-panel {
+      & > #menu-panel,
+      & > #sub-panel {
         grid-area: main;
-        transform: translateX(-100%);
         transition: transform 0.3s;
+        width: min(30rem, 90%);
+      }
+
+      & > #menu-panel {
+        transform: translateX(-100%);
       }
 
       & > #menu-panel.opened {
@@ -75,9 +122,10 @@ const { title } = Astro.props;
       }
 
       & > #sub-panel {
-        grid-area: main;
+        justify-self: right;
+        border-right: unset;
+        border-left: var(--border-style);
         transform: translateX(100%);
-        transition: transform 0.3s;
       }
 
       & > #sub-panel.opened {
@@ -88,8 +136,43 @@ const { title } = Astro.props;
         grid-area: main;
       }
 
+      & > #backdrop {
+        background-color: rgb(var(--theme-color-shade));
+        opacity: 0%;
+        transition: opacity 0.3s;
+        grid-area: main;
+      }
+
+      & > #backdrop:not(.on) {
+        touch-action: none;
+        pointer-events: none;
+      }
+
+      & > #backdrop.on {
+        opacity: 60%;
+        cursor: pointer;
+      }
+
       & > #navbar {
         grid-area: navbar;
+        display: grid;
+        grid-template-columns: 5rem 1fr 5rem;
+        place-items: center;
+        border-top: var(--border-style);
+
+        & > button:not(.on) > .when-on,
+        & > button.on > .when-off {
+          display: none;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 20rem) {
+    body {
+      & > #menu-panel,
+      & > #sub-panel {
+        width: 100%;
       }
     }
   }
@@ -111,7 +194,8 @@ const { title } = Astro.props;
         grid-area: main;
       }
 
-      & > #navbar {
+      & > #navbar,
+      & > #backdrop {
         display: none;
       }
     }

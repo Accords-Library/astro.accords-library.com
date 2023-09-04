@@ -1,0 +1,8 @@
+:where(button) {
+  background-color: inherit;
+  color: inherit;
+  border: initial;
+  padding: initial;
+  margin: initial;
+  cursor: pointer;
+}
