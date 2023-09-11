@@ -1,6 +1,6 @@
-import node from "@astrojs/node";
 import icon from "astro-icon";
 import { defineConfig } from "astro/config";
+import node from "@astrojs/node";
 
 // https://astro.build/config
 export default defineConfig({
@@ -18,8 +18,9 @@ export default defineConfig({
       },
     }),
   ],
+
   server: {
-    port: import.meta.env.ASTRO_PORT,
-    host: import.meta.env.ASTRO_HOST,
+    port: 12499,
+    host: true,
   },
 });

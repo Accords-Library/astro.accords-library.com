@@ -1,8 +1,4 @@
 {
   "editor.rulers": [100],
-  "editor.codeActionsOnSave": {
-    "source.fixAll": true,
-    "source.organizeImports": true
-  },
   "editor.tabSize": 2
 }

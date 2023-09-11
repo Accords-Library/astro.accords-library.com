@@ -1,0 +1,94 @@
+---
+import { Icon } from "astro-icon/components";
+import { getLocalizedUrl } from "utils/urls";
+interface Props {
+  href: string;
+  icon?: string;
+  title: string | null | undefined;
+  subtitle?: string | null | undefined;
+}
+
+const { locale } = Astro.params;
+const { href, icon, title, subtitle } = Astro.props;
+
+const currentPath = new URL(Astro.request.url).pathname.slice(
+  `/${locale}`.length
+);
+
+const isActive = currentPath.startsWith(href);
+---
+
+<a
+  id="component"
+  href={getLocalizedUrl(href, locale)}
+  class:list={{ active: isActive }}
+>
+  {icon && <Icon name={icon} />}
+  <div>
+    <p id="title">
+      {title}
+    </p>
+    <p>
+      {subtitle}
+    </p>
+  </div>
+</a>
+
+<style>
+  #component {
+    @container (max-width: 15rem) {
+      width: 3.5rem;
+
+      & > div {
+        & > #title,
+        & > p {
+          display: none;
+        }
+      }
+    }
+
+    padding: 1rem;
+    color: inherit;
+    text-decoration: inherit;
+
+    display: flex;
+    width: 100%;
+    gap: 1.25rem;
+    border-radius: 1rem;
+
+    transition:
+      0.15s background-color,
+      0.15s box-shadow;
+
+    &:hover,
+    &.active {
+      box-shadow: inset 0 1px 4px -2px var(--color-shadow);
+      background-color: var(--color-base-250);
+
+      &:active {
+        box-shadow: inset 0 2px 4px 0 var(--color-shadow);
+      }
+    }
+
+    & > svg {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    & > div {
+      display: grid;
+      flex-grow: 1;
+
+      & > #title {
+        line-height: 1.1;
+        font-size: 1.5rem;
+        font-family: var(--font-headers);
+      }
+
+      & > p {
+        margin: 0;
+      }
+    }
+  }
+</style>

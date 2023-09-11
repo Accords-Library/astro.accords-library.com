@@ -1,202 +1,139 @@
 ---
-import { Icon } from "astro-icon/components";
+import Html from "layouts/Html.astro";
+import Navbar from "components/Navbar.astro";
+import MenuPanel from "components/MenuPanel.astro";
 
 interface Props {
   title: string;
 }
 
 const { title } = Astro.props;
+
+const turnSubPanelIntoMainPanel =
+  Astro.slots.has("subPanel") && !Astro.slots.has("mainPanel");
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title}</title>
-  </head>
-  <body class="theme-color-dark">
-    <div id="main-panel">
-      <slot name="mainPanel">Main Panel</slot>
+<Html title={title}>
+  <div
+    id="panels"
+    class:list={{ "turn-sub-into-main": turnSubPanelIntoMainPanel }}
+  >
+    <div id="menu-panel" class="texture-dots">
+      <MenuPanel />
     </div>
-    <div id="backdrop"></div>
-    <div id="sub-panel">
-      <slot name="subPanel">Sub Panel</slot>
+
+    <div id="sub-panel" class="texture-dots">
+      <slot name="subPanel" />
     </div>
-    <div id="menu-panel">Menu Panel</div>
-    <div id="navbar">
-      <button id="open-menu">
-        <Icon class="when-off" name="material-symbols:menu" width={24} height={24} />
-        <Icon class="when-on" name="material-symbols:close" width={24} height={24} />
-      </button>
-      {title}
-      <button id="open-sub">
-        <Icon class="when-off" name="material-symbols:tune" width={24} height={24} />
-        <Icon class="when-on" name="material-symbols:close" width={24} height={24} />
-      </button>
+
+    <div id="main-panel" class="texture-dots">
+      <slot name="mainPanel" />
     </div>
-  </body>
-</html>
+  </div>
 
-<script>
-  const subPanel = document.querySelector("#sub-panel")!;
-  const menuPanel = document.querySelector("#menu-panel")!;
-  const openMenuButton = document.querySelector("#open-menu")!;
-  const subMenuButton = document.querySelector("#open-sub")!;
-  const backdrop = document.querySelector("#backdrop")!;
-
-  openMenuButton.addEventListener("click", () => {
-    menuPanel.classList.toggle("opened");
-    openMenuButton.classList.toggle("on");
-    subPanel.classList.remove("opened");
-    subMenuButton.classList.remove("on");
-
-    if (menuPanel.classList.contains("opened")) {
-      backdrop.classList.add("on");
-    } else {
-      backdrop.classList.remove("on");
-    }
-  });
-
-  subMenuButton.addEventListener("click", () => {
-    subPanel.classList.toggle("opened");
-    subMenuButton.classList.toggle("on");
-    menuPanel.classList.remove("opened");
-    openMenuButton.classList.remove("on");
-
-    if (subPanel.classList.contains("opened")) {
-      backdrop.classList.add("on");
-    } else {
-      backdrop.classList.remove("on");
-    }
-  });
-
-  backdrop.addEventListener("click", () => {
-    backdrop.classList.remove("on");
-    subPanel.classList.remove("opened");
-    subMenuButton.classList.remove("on");
-    menuPanel.classList.remove("opened");
-    openMenuButton.classList.remove("on");
-  });
-</script>
+  <div id="navbar">
+    <Navbar
+      title={title}
+      showSubPanel={Astro.slots.has("subPanel") && !turnSubPanelIntoMainPanel}
+    />
+  </div>
+</Html>
 
 <style>
   body {
-    --border-style: 1px solid rgb(var(--theme-color-dark) / 0.5);
-    display: grid;
-    background-color: rgb(var(--theme-color-light));
-    color: rgb(var(--theme-color-black));
-    inset: 0;
-    position: absolute;
     overflow: hidden;
+    position: absolute;
+    inset: 0;
+    --border-style: 1px solid var(--color-base-400);
 
-    & > div {
-      background-color: rgb(var(--theme-color-light));
-    }
-
-    & > #sub-panel,
-    & > #menu-panel {
-      border-right: var(--border-style);
-    }
-  }
-
-  @media (max-width: 60rem) {
-    body {
-      grid-template-areas: "main" "navbar";
+    @media (width < 60rem) {
+      display: grid;
       grid-template-rows: 1fr 5rem;
+    }
 
-      & > #menu-panel,
-      & > #sub-panel {
-        grid-area: main;
-        transition: transform 0.3s;
-        width: min(30rem, 90%);
+    & > #navbar {
+      display: grid;
+      @media (width >= 60rem) {
+        display: none;
       }
+    }
 
-      & > #menu-panel {
-        transform: translateX(-100%);
-      }
+    & > #panels {
+      position: relative;
 
-      & > #menu-panel.opened {
-        transform: translateX(0%);
-      }
-
-      & > #sub-panel {
-        justify-self: right;
-        border-right: unset;
-        border-left: var(--border-style);
-        transform: translateX(100%);
-      }
-
-      & > #sub-panel.opened {
-        transform: translateX(0%);
-      }
-
-      & > #main-panel {
-        grid-area: main;
-      }
-
-      & > #backdrop {
-        background-color: rgb(var(--theme-color-shade));
-        opacity: 0%;
-        transition: opacity 0.3s;
-        grid-area: main;
-      }
-
-      & > #backdrop:not(.on) {
-        touch-action: none;
-        pointer-events: none;
-      }
-
-      & > #backdrop.on {
-        opacity: 60%;
-        cursor: pointer;
-      }
-
-      & > #navbar {
-        grid-area: navbar;
-        display: grid;
-        grid-template-columns: 5rem 1fr 5rem;
-        place-items: center;
-        border-top: var(--border-style);
-
-        & > button:not(.on) > .when-on,
-        & > button.on > .when-off {
-          display: none;
+      @media (width < 60rem) {
+        &.turn-sub-into-main > #sub-panel {
+          inset: 0;
+          z-index: 0;
+          transition: initial;
+          border: initial;
+          width: 100%;
         }
       }
-    }
-  }
 
-  @media (max-width: 20rem) {
-    body {
-      & > #menu-panel,
-      & > #sub-panel {
-        width: 100%;
+      @media (width >= 60rem) {
+        position: absolute;
+        inset: 0;
+        display: flex;
       }
-    }
-  }
 
-  @media (min-width: 60rem) {
-    body {
-      grid-template-columns: 20rem 20rem 1fr;
-      grid-template-areas: "menu sub main";
+      & > #sub-panel {
+        @media (width < 60rem) {
+          right: -100%;
+          top: 0;
+          bottom: 0;
+          transition: 0.2s right;
+          z-index: 1;
+          border-left: var(--border-style);
+
+          &.opened {
+            right: 0;
+          }
+        }
+
+        @media (width >= 60rem) {
+          width: 20rem;
+          flex-shrink: 0;
+          border-right: var(--border-style);
+        }
+      }
 
       & > #menu-panel {
-        grid-area: menu;
-      }
+        background-position: top right;
+        flex-shrink: 0;
+        overflow-y: auto;
 
-      & > #sub-panel {
-        grid-area: sub;
+        @media (width < 60rem) {
+          left: -100%;
+          top: 0;
+          bottom: 0;
+          transition: 0.2s left;
+          z-index: 1;
+          border-right: var(--border-style);
+
+          &.opened {
+            left: 0;
+          }
+        }
       }
 
       & > #main-panel {
-        grid-area: main;
+        width: 100%;
       }
 
-      & > #navbar,
-      & > #backdrop {
-        display: none;
+      & > div {
+        display: grid;
+        background-color: var(--color-base-150);
+        justify-content: center;
+
+        &:empty {
+          display: none;
+        }
+
+        @media (width < 60rem) {
+          position: absolute;
+          width: min(30rem, 90%);
+        }
       }
     }
   }

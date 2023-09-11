@@ -1,0 +1,88 @@
+---
+import { Icon } from "astro-icon/components";
+import AppLayout from "layouts/AppLayout.astro";
+---
+
+<AppLayout title="Accord’s Library">
+  <main slot="mainPanel">
+    <div id="header">
+      <div>
+        <Icon name="accords" />
+      </div>
+      <h1>Accord’s Library</h1>
+      <h2 class="angelic">Discover • Analyze • Translate • Archive</h2>
+    </div>
+
+    <div class="formatted">
+      <p>
+        Accord’s Library aims at gathering and archiving all of Yoko Taro’s
+        work. Yoko Taro is a Japanese video game director and scenario writer.
+        He is best-known for his work on the NieR and Drakengard (Drag-on
+        Dragoon) franchises. To complement his games, Yoko Taro likes to publish
+        side materials in the form of books, novellas, artbooks, stage plays,
+        manga, drama CDs, and comics. Those side materials can be very difficult
+        to find. His work goes all the way back to 2003, and most of them are
+        out of print after having been released solely in Japan, sometimes in
+        limited quantities. Their prices on the second hand market have
+        skyrocketed, ranging all the way to hundreds if not thousand of dollars
+        for the rarest items.
+      </p><p>
+        This is where this library takes its meaning, in trying to help the
+        community grow by providing translators, writers, and wiki’s
+        contributors a simple way to access these records filled with stories,
+        artworks, and knowledge.
+      </p><p>
+        We are a small group of Yoko Taro’s fans that decided to join forces and
+        create a website and a community. Our motto is <strong
+          >Discover • Analyze • Translate • Archive</strong
+        > (D.A.T.A. for short). We started with the goal of gathering and
+        archiving as much side-materials/merch as possible. But since then, our
+        ambition grew and we decided to create a full-fledged website that will
+        also include news articles, lore, summaries, translations, and
+        transcriptions. Hopefully one day, we will be up there in the list of
+        notable resources for Drakengard and NieR fans. ​
+      </p>
+    </div>
+  </main>
+</AppLayout>
+
+<style>
+  main {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+    padding-bottom: 8rem;
+    padding-top: 5rem;
+    max-width: 42rem;
+  }
+
+  .angelic {
+    font-family: var(--font-angelic);
+  }
+
+  #header {
+    display: grid;
+    place-content: center;
+    place-items: center;
+
+    & > h1 {
+      font-size: 3rem;
+      margin-bottom: 0;
+      line-height: 0.9;
+    }
+
+    & > h2 {
+      margin-top: 0;
+      font-size: 1.125rem;
+    }
+
+    & > div {
+      aspect-ratio: 1/1;
+      width: 128px;
+
+      & > svg {
+        height: 100%;
+        width: 100%;
+      }
+    }
+  }
+</style>

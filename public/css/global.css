@@ -1,0 +1,28 @@
+/*
+original light mode
+color: #fff1e0;
+  color: #ffedd8;
+  color: #f0d1b3;
+  color: #c0845e;
+  color: #9c6644;
+  color: #1b1811; */
+
+/* 
+ original dark mode
+ color: #191914;
+  color: #26221e;
+  color: #2c2803;
+  color: #392d22;
+  color: #c0845e;
+  color: #ebeae7; */
+
+/* new version using https://leonardocolor.io/theme.html */
+
+:where(button) {
+  background-color: inherit;
+  color: inherit;
+  border: initial;
+  padding: initial;
+  margin: initial;
+  cursor: pointer;
+}
