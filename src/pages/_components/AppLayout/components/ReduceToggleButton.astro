@@ -1,0 +1,45 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  icon: string;
+}
+
+const { icon } = Astro.props;
+---
+
+{
+  /* ------------------------------------------- HTML ------------------------------------------- */
+}
+
+<button id="reduce-toggle">
+  <Icon name={icon} width={24} height={24} />
+</button>
+
+{
+  /* -------------------------------------------- JS -------------------------------------------- */
+}
+
+<script>
+  import { Elementos } from "utils/Elementos";
+  import { CookieNames } from "utils/cookies";
+  import { observableWithPersistence } from "utils/micro-observables";
+  import { onLoad } from "utils/turbo";
+
+  onLoad(() => {
+    const toggleReducedButton = new Elementos("#reduce-toggle");
+    const menuPanel = new Elementos("#menu-panel");
+
+    const isReduced = observableWithPersistence(
+      CookieNames.MENU_PANEL_REDUCED,
+      false
+    );
+
+    toggleReducedButton.onClick(() => {
+      isReduced.update((oldValue) => !oldValue);
+      Turbo.cache.clear();
+    });
+
+    menuPanel.setClass("reduced", isReduced);
+  });
+</script>

@@ -1,0 +1,87 @@
+---
+import { Icon } from "astro-icon/components";
+import { parseCookie } from "utils/astro";
+import { CookieNames } from "utils/cookies";
+
+const themeColors = parseCookie<string>(
+  Astro.cookies.get(CookieNames.THEME_COLOR),
+  "theme-color-light"
+);
+---
+
+{
+  /* ------------------------------------------- HTML ------------------------------------------- */
+}
+
+<button
+  class={themeColors === "theme-color-dark" ? "dark" : "light"}
+  id="theme-toggle"
+>
+  <Icon
+    class="when-light"
+    name="material-symbols:light-mode"
+    width={24}
+    height={24}
+  />
+  <Icon
+    class="when-dark"
+    name="material-symbols:dark-mode"
+    width={24}
+    height={24}
+  />
+</button>
+
+{
+  /* ------------------------------------------- CSS -------------------------------------------- */
+}
+
+<style>
+  #theme-toggle.dark > .when-light,
+  #theme-toggle.light > .when-dark {
+    display: none;
+  }
+</style>
+
+{
+  /* -------------------------------------------- JS -------------------------------------------- */
+}
+
+<script>
+  import { Elementos } from "utils/Elementos";
+  import { CookieNames } from "utils/cookies";
+  import { observableWithPersistence } from "utils/micro-observables";
+  import { onLoad } from "utils/turbo";
+
+  onLoad(() => {
+    const body = new Elementos("body");
+    const themeToggleButton = new Elementos("#theme-toggle");
+
+    const themeColor = observableWithPersistence(
+      CookieNames.THEME_COLOR,
+      "theme-color-light"
+    );
+
+    const isDarkMode = themeColor.select(
+      (value) => value === "theme-color-dark"
+    );
+
+    themeToggleButton.onClick(() => {
+      themeColor.update((oldValue) =>
+        oldValue === "theme-color-light"
+          ? "theme-color-dark"
+          : "theme-color-light"
+      );
+      Turbo.cache.clear();
+    });
+
+    themeToggleButton.setClass(
+      { ifFalse: "light", ifTrue: "dark" },
+      isDarkMode
+    );
+
+    body.setClass(
+      { ifFalse: "theme-color-light", ifTrue: "theme-color-dark" },
+      isDarkMode
+    );
+  });
+</script>

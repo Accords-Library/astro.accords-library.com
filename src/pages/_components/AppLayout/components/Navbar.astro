@@ -1,0 +1,93 @@
+---
+import { Icon } from "astro-icon/components";
+interface Props {
+  title: string;
+  showSubPanel: boolean;
+}
+
+const { title, showSubPanel } = Astro.props;
+---
+
+{
+  /* ------------------------------------------- HTML ------------------------------------------- */
+}
+
+<button id="toggle-menu-panel">
+  <Icon
+    class="when-off"
+    name="material-symbols:menu-rounded"
+    width={24}
+    height={24}
+  />
+  <Icon
+    class="when-on"
+    name="material-symbols:close-rounded"
+    width={24}
+    height={24}
+  />
+</button>
+<p>{title}</p>
+<div>
+  {
+    showSubPanel && (
+      <button id="toggle-sub-panel">
+        <Icon
+          class="when-off"
+          name="material-symbols:tune-rounded"
+          width={24}
+          height={24}
+        />
+        <Icon
+          class="when-on"
+          name="material-symbols:close-rounded"
+          width={24}
+          height={24}
+        />
+      </button>
+    )
+  }
+</div>
+
+{
+  /* ------------------------------------------- CSS -------------------------------------------- */
+}
+
+<style>
+  .on > .when-off,
+  :not(.on) > .when-on {
+    display: none;
+  }
+</style>
+
+{
+  /* -------------------------------------------- JS -------------------------------------------- */
+}
+
+<script>
+  import { Elementos } from "utils/Elementos";
+  import { observable } from "utils/micro-observables";
+  import { onLoad } from "utils/turbo";
+
+  onLoad(() => {
+    const isMenuPanelOpened = observable(false);
+    const menuPanel = new Elementos("#menu-panel");
+    const menuPanelToggle = new Elementos("#toggle-menu-panel");
+
+    menuPanelToggle.onClick(() => {
+      isMenuPanelOpened.update((current) => !current);
+      isSubPanelOpened.set(false);
+    });
+    menuPanel.setClass("opened", isMenuPanelOpened);
+    menuPanelToggle.setClass("on", isMenuPanelOpened);
+
+    const isSubPanelOpened = observable(false);
+    const subPanel = new Elementos("#sub-panel");
+    const subPanelToggle = new Elementos("#toggle-sub-panel");
+    subPanelToggle.onClick(() => {
+      isSubPanelOpened.update((current) => !current);
+      isMenuPanelOpened.set(false);
+    });
+    subPanel.setClass("opened", isSubPanelOpened);
+    subPanelToggle.setClass("on", isSubPanelOpened);
+  });
+</script>

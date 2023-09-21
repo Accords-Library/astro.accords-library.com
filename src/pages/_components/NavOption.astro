@@ -18,35 +18,30 @@ const currentPath = new URL(Astro.request.url).pathname.slice(
 const isActive = currentPath.startsWith(href);
 ---
 
+{
+  /* ------------------------------------------- HTML ------------------------------------------- */
+}
+
 <a
   id="component"
   href={getLocalizedUrl(href, locale)}
   class:list={{ active: isActive }}
 >
   {icon && <Icon name={icon} />}
-  <div>
-    <p id="title">
+  <div id="text-content">
+    <p class="font-headers">
       {title}
     </p>
-    <p>
-      {subtitle}
-    </p>
+    {subtitle && <p>{subtitle}</p>}
   </div>
 </a>
 
+{
+  /* ------------------------------------------- CSS -------------------------------------------- */
+}
+
 <style>
   #component {
-    @container (max-width: 15rem) {
-      width: 3.5rem;
-
-      & > div {
-        & > #title,
-        & > p {
-          display: none;
-        }
-      }
-    }
-
     padding: 1rem;
     color: inherit;
     text-decoration: inherit;
@@ -76,19 +71,26 @@ const isActive = currentPath.startsWith(href);
       flex-shrink: 0;
     }
 
-    & > div {
-      display: grid;
-      flex-grow: 1;
+    @container (max-width: 15rem) {
+      width: 3.5rem;
 
-      & > #title {
-        line-height: 1.1;
-        font-size: 1.5rem;
-        font-family: var(--font-headers);
+      & > #text-content {
+        display: none;
       }
+    }
+  }
 
-      & > p {
-        margin: 0;
-      }
+  #text-content {
+    display: grid;
+    flex-grow: 1;
+    gap: 0.25rem;
+
+    & > .font-headers {
+      font-size: 150%;
+    }
+
+    & > :not(.font-headers) {
+      line-height: 1.5;
     }
   }
 </style>

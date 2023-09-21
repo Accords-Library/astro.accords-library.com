@@ -1,0 +1,388 @@
+---
+import { parseCookie } from "utils/astro";
+import { CookieNames } from "utils/cookies";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+const themeColors = parseCookie(
+  Astro.cookies.get(CookieNames.THEME_COLOR),
+  "theme-color-light"
+);
+---
+
+{
+  /* ------------------------------------------- HTML ------------------------------------------- */
+}
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title}</title>
+    <script is:inline src="/js/turbo.es2017-umd.js" async defer></script>
+    <link href="/css/sanitize.min.css" rel="stylesheet" />
+    <link href="/css/tippy.css" rel="stylesheet" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+
+  <body class={themeColors}>
+    <slot />
+  </body>
+</html>
+
+{
+  /* ------------------------------------------- CSS -------------------------------------------- */
+}
+
+<style is:global>
+  /* RESET */
+
+  html,
+  body,
+  div,
+  span,
+  applet,
+  object,
+  iframe,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  blockquote,
+  pre,
+  a,
+  abbr,
+  acronym,
+  address,
+  big,
+  cite,
+  code,
+  del,
+  dfn,
+  em,
+  img,
+  ins,
+  kbd,
+  q,
+  s,
+  samp,
+  small,
+  strike,
+  strong,
+  sub,
+  sup,
+  tt,
+  var,
+  b,
+  u,
+  i,
+  center,
+  dl,
+  dt,
+  dd,
+  ol,
+  ul,
+  li,
+  fieldset,
+  form,
+  label,
+  legend,
+  table,
+  caption,
+  tbody,
+  tfoot,
+  thead,
+  tr,
+  th,
+  td,
+  article,
+  aside,
+  canvas,
+  details,
+  embed,
+  figure,
+  figcaption,
+  footer,
+  header,
+  hgroup,
+  main,
+  menu,
+  nav,
+  output,
+  ruby,
+  section,
+  summary,
+  time,
+  mark,
+  audio,
+  video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+  }
+
+  body {
+    line-height: 1;
+  }
+
+  menu,
+  ol,
+  ul {
+    list-style: none;
+  }
+
+  blockquote,
+  q {
+    quotes: none;
+  }
+
+  blockquote:before,
+  blockquote:after,
+  q:before,
+  q:after {
+    content: "";
+    content: none;
+  }
+
+  :where(button) {
+    background-color: inherit;
+    color: inherit;
+    border: initial;
+    padding: initial;
+    margin: initial;
+    cursor: pointer;
+  }
+
+  /* THEMING */
+
+  .theme-color-light {
+    --color-base-0: #ffffff;
+    --color-base-50: #fffaf3;
+    --color-base-100: #fff4e6;
+    --color-base-150: #fdebd4;
+    --color-base-200: #f7ddc2;
+    --color-base-250: #efcfb0;
+    --color-base-300: #e5be9e;
+    --color-base-350: #ddb08e;
+    --color-base-400: #d3a07c;
+    --color-base-450: #ca926c;
+    --color-base-500: #c0835d;
+    --color-base-550: #b3754f;
+    --color-base-600: #a26a47;
+    --color-base-650: #905e3f;
+    --color-base-700: #805438;
+    --color-base-750: #6e4a31;
+    --color-base-800: #5e402b;
+    --color-base-850: #4d3625;
+    --color-base-900: #3c2d1e;
+    --color-base-950: #2f2419;
+    --color-base-1000: #1f1a13;
+
+    --color-elevation-1: var(--color-base-100);
+    --color-elevation-0: var(--color-base-150);
+
+    --color-shadow: var(--color-base-500);
+
+    --texture-dots: url(/images/paper-dots.webp);
+    --texture-dots-blend: multiply;
+  }
+
+  .theme-color-dark {
+    --color-base-1000: #ebeae7;
+    --color-base-950: #eae5e0;
+    --color-base-900: #e8dfd8;
+    --color-base-850: #e4d1c4;
+    --color-base-800: #e0bfaa;
+    --color-base-750: #dcb095;
+    --color-base-700: #d4a07f;
+    --color-base-650: #cb916c;
+    --color-base-600: #bf835d;
+    --color-base-550: #b07751;
+    --color-base-500: #a06b48;
+    --color-base-450: #8f5f40;
+    --color-base-400: #7d5539;
+    --color-base-350: #6b4a33;
+    --color-base-300: #5c412e;
+    --color-base-250: #4a3728;
+    --color-base-200: #3a2d22;
+    --color-base-150: #27231e;
+    --color-base-100: #1c1b16;
+    --color-base-50: #11110d;
+    --color-base-0: #000000;
+
+    --color-elevation-1: var(--color-base-200);
+    --color-elevation-0: var(--color-base-150);
+
+    --color-shadow: var(--color-base-50);
+
+    --texture-dots: url(/images/paper-dots-dark.webp);
+    --texture-dots-blend: overlay;
+  }
+
+  /* FONTS */
+
+  @font-face {
+    font-family: "Vollkorn";
+    src: url("/fonts/Vollkorn-Bold.woff2") format("woff2");
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Noto Sans";
+    src: url("/fonts/NotoSans-Medium.woff2") format("woff2");
+    font-weight: medium;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Noto Sans";
+    src: url("/fonts/NotoSans-Bold.woff2") format("woff2");
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Angelic Agrippa";
+    src: url("/fonts/AngelicAgrippa-Regular.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  p {
+    font-family: var(--font-body);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-headers);
+  }
+
+  .font-headers {
+    font-family: var(--font-headers);
+  }
+
+  .font-body {
+    font-family: var(--font-body);
+  }
+
+  .text-xs {
+    font-size: 0.75rem /* 12px */;
+    line-height: 1rem /* 16px */;
+  }
+
+  .text-sm {
+    font-size: 0.875rem /* 14px */;
+    line-height: 1.25rem /* 20px */;
+  }
+
+  .text-base {
+    font-size: 1rem /* 16px */;
+    line-height: 1.5rem /* 24px */;
+  }
+
+  .text-lg {
+    font-size: 1.125rem /* 18px */;
+    line-height: 1.75rem /* 28px */;
+  }
+
+  .text-xl {
+    font-size: 1.25rem /* 20px */;
+    line-height: 1.75rem /* 28px */;
+  }
+
+  .text-2xl {
+    font-size: 1.5rem /* 24px */;
+    line-height: 2rem /* 32px */;
+  }
+
+  .text-3xl {
+    font-size: 1.875rem /* 30px */;
+    line-height: 2.25rem /* 36px */;
+  }
+
+  /* GLOBAL */
+
+  * {
+    scrollbar-color: var(--color-base-600) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    background-color: transparent;
+    width: 4px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: var(--color-base-600);
+    border-radius: 9999px;
+  }
+
+  .texture-dots {
+    background-size: 10cm;
+    background-attachment: local;
+    background-image: var(--texture-dots);
+    background-blend-mode: var(--texture-dots-blend);
+    background-repeat: repeat;
+  }
+
+  body {
+    background-color: var(--color-base-150);
+    color: var(--color-base-1000);
+    font-size: 95%;
+  }
+
+  button {
+    color: var(--color-base-600);
+    border: 1px solid var(--color-base-600);
+    border-radius: 9999px;
+    padding: 0 1rem;
+    height: 2.5rem;
+    transition-property: color, background-color, box-shadow, border-color;
+    transition-duration: 0.1s;
+
+    &:hover {
+      background-color: var(--color-base-600);
+      color: var(--color-base-150);
+      box-shadow:
+        0 10px 15px -3px var(--color-shadow),
+        0 0 6px -4px var(--color-shadow);
+    }
+
+    &:active {
+      background-color: var(--color-base-1000);
+      color: var(--color-base-0);
+      border-color: var(--color-base-1000);
+      box-shadow:
+        0 10px 15px -3px var(--color-base-1000),
+        0 0 6px -4px var(--color-base-1000);
+    }
+  }
+
+  .turbo-progress-bar {
+    height: 5px;
+    background-color: #b07751;
+  }
+
+  :root {
+    --font-body: "Noto Sans", sans-serif;
+    --font-headers: "Vollkorn", serif;
+    --font-angelic: "Angelic Agrippa", serif;
+  }
+</style>

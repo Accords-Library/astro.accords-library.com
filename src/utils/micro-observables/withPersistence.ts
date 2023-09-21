@@ -5,8 +5,10 @@ export const observableWithPersistence = <T>(
   cookieKey: string,
   defaultValue: T
 ): WritableObservable<T> => {
-  const valueFromCookie = Cookies.get(cookieKey) as T | undefined;
+  const valueFromCookie: T | null = JSON.parse(
+    Cookies.get(cookieKey) ?? "null"
+  );
   const obs = observable(valueFromCookie ?? defaultValue);
-  obs.subscribe((val) => Cookies.set(cookieKey, val as string));
+  obs.subscribe((val) => Cookies.set(cookieKey, JSON.stringify(val)));
   return obs;
 };

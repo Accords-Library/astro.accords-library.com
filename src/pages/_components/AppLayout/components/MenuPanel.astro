@@ -1,0 +1,162 @@
+---
+import { Icon } from "astro-icon/components";
+import { getLocalizedUrl } from "utils/urls";
+import NavOption from "pages/_components/NavOption.astro";
+import HorizontalLine from "pages/_components/HorizontalLine.astro";
+import ReduceToggleButton from "./ReduceToggleButton.astro";
+import ThemeToggleButton from "./ThemeToggleButton.astro";
+
+const { locale = "en" } = Astro.params;
+---
+
+{
+  /* ------------------------------------------- HTML ------------------------------------------- */
+}
+
+<a
+  id="accords-logo"
+  data-turbo-confirm="Do you want to leave this page?"
+  href={getLocalizedUrl("/", locale)}
+>
+  <Icon name="accords" />
+</a>
+
+<p id="title">Accord’s Library</p>
+
+<div id="buttons">
+  <ReduceToggleButton icon="material-symbols:chevron-left-rounded" />
+  <ThemeToggleButton />
+</div>
+
+<HorizontalLine />
+
+<NavOption
+  href="/library"
+  icon="material-symbols:auto-stories"
+  title="Library"
+  subtitle="Browse all physical and digital media"
+/>
+
+<NavOption
+  href="/contents"
+  icon="material-symbols:workspaces"
+  title="Content"
+  subtitle="Explore all content and filter by type or category"
+/>
+
+<NavOption
+  href="/wiki"
+  icon="material-symbols:travel-explore"
+  title="Wiki"
+  subtitle="An encyclopedia for everything related to DrakeNieR"
+/>
+
+<NavOption
+  href="/chronicles"
+  icon="material-symbols:schedule"
+  title="Chronicles"
+  subtitle="Experience all events and content in chronological order"
+/>
+
+<HorizontalLine />
+
+<NavOption href="/news" icon="material-symbols:newspaper" title="News" />
+
+<NavOption
+  href="https://gallery.accords-library.com/posts/"
+  icon="material-symbols:perm-media"
+  title="Gallery"
+/>
+
+<NavOption href="/archives" icon="material-symbols:save" title="Archives" />
+
+<NavOption href="/about-us" icon="material-symbols:info" title="About us" />
+
+<HorizontalLine />
+
+<p>
+  This website’s content is made available under <a
+    href="https://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA</a
+  > unless otherwise noted.
+</p>
+
+<div id="common-creative">
+  <Icon name="creative-commons-brands" />
+  <Icon name="creative-commons-by-brands" />
+  <Icon name="creative-commons-sa-brands" />
+</div>
+
+<p>
+  Accord’s Library is not affiliated with or endorsed by SQUARE ENIX CO. LTD.
+  All game assets and promotional materials belongs to © SQUARE ENIX CO. LTD.
+</p>
+
+<div id="social-links">
+  <Icon name="github-brands" />
+  <Icon name="x-brands" />
+  <Icon name="discord-brands" />
+</div>
+
+{
+  /* ------------------------------------------- CSS -------------------------------------------- */
+}
+
+<style>
+  #title {
+    font-family: var(--font-headers);
+    font-size: 1.875rem;
+  }
+
+  p {
+    text-align: center;
+  }
+
+  #accords-logo {
+    width: max(50%, 3rem);
+    aspect-ratio: 1/1;
+    color: var(--color-base-1000);
+
+    &:hover {
+      color: var(--color-base-600);
+    }
+
+    & > svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  #buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  #common-creative {
+    display: grid;
+    grid-auto-flow: column;
+    place-content: center;
+    gap: 0.25rem;
+
+    & > svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  p {
+    text-align: center;
+  }
+
+  #social-links {
+    display: grid;
+    grid-auto-flow: column;
+    place-items: center;
+    gap: 2rem;
+
+    & > svg {
+      width: 40px;
+      height: 40px;
+    }
+  }
+</style>

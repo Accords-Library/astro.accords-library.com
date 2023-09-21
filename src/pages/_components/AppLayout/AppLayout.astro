@@ -1,0 +1,205 @@
+---
+import Html from "pages/_components/Html.astro";
+import MenuPanel from "./components/MenuPanel.astro";
+import Navbar from "./components/Navbar.astro";
+import MenuPanelReduced from "./components/MenuPanelReduced.astro";
+import { parseCookie } from "utils/astro";
+import { CookieNames } from "utils/cookies";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+
+const turnSubPanelIntoMainPanel =
+  Astro.slots.has("subPanel") && !Astro.slots.has("mainPanel");
+
+const isMenuPanelReduced = parseCookie<boolean>(
+  Astro.cookies.get(CookieNames.MENU_PANEL_REDUCED),
+  false
+);
+---
+
+{
+  /* ------------------------------------------- HTML ------------------------------------------- */
+}
+
+<Html title={title}>
+  <div
+    id="panels"
+    class:list={{ "turn-sub-into-main": turnSubPanelIntoMainPanel }}
+  >
+    <div
+      id="menu-panel"
+      class:list={["texture-dots", { reduced: isMenuPanelReduced }]}
+    >
+      <div class="when-reduced">
+        <MenuPanelReduced />
+      </div>
+      <div class="when-not-reduced">
+        <MenuPanel />
+      </div>
+    </div>
+
+    <div id="sub-panel" class="texture-dots">
+      <slot name="subPanel" />
+    </div>
+
+    <div id="main-panel" class="texture-dots">
+      <slot name="mainPanel" />
+    </div>
+  </div>
+
+  <div id="navbar">
+    <Navbar
+      title={title}
+      showSubPanel={Astro.slots.has("subPanel") && !turnSubPanelIntoMainPanel}
+    />
+  </div>
+</Html>
+
+{
+  /* ------------------------------------------- CSS -------------------------------------------- */
+}
+
+<style>
+  body {
+    overflow: hidden;
+    position: absolute;
+    inset: 0;
+    --border-style: 1px solid var(--color-base-400);
+
+    @media (width < 60rem) {
+      display: grid;
+      grid-template-rows: 1fr 5rem;
+    }
+
+    & > #panels {
+      display: flex;
+      position: relative;
+
+      @media (width >= 60rem) {
+        position: absolute;
+        inset: 0;
+      }
+
+      @media (width < 60rem) {
+        &.turn-sub-into-main > #sub-panel {
+          inset: 0;
+          z-index: initial;
+          transition: initial;
+          border: initial;
+          width: 100%;
+        }
+      }
+
+      & > #sub-panel {
+        @media (width < 60rem) {
+          right: -100%;
+          transition: 0.2s right;
+          border-left: var(--border-style);
+
+          &.opened {
+            right: 0;
+          }
+        }
+
+        @media (width >= 60rem) {
+          border-right: var(--border-style);
+        }
+      }
+
+      & > #menu-panel {
+        border-right: var(--border-style);
+        background-position: top right;
+
+        @media (width < 60rem) {
+          left: -100%;
+          transition: 0.2s left;
+
+          &.opened {
+            left: 0;
+          }
+
+          & > .when-reduced {
+            display: none;
+          }
+        }
+
+        @media (width >=60rem) {
+          transition: 0.2s width;
+
+          &.reduced {
+            width: auto;
+            padding: 1rem;
+          }
+
+          &.reduced > .when-not-reduced,
+          &:not(.reduced) > .when-reduced {
+            display: none;
+          }
+        }
+
+        & > div {
+          display: grid;
+          align-content: start;
+          justify-items: center;
+          gap: 1rem;
+        }
+      }
+
+      & > #main-panel {
+        width: 100%;
+
+        @media (width < 60rem) {
+          position: absolute;
+          inset: 0;
+        }
+      }
+
+      & > #menu-panel,
+      & > #sub-panel {
+        width: 20rem;
+        flex-shrink: 0;
+        overflow-x: hidden;
+
+        @media (width < 60rem) {
+          z-index: 1;
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          width: min(30rem, 90%);
+
+          @media (width < 20rem) {
+            width: 100%;
+          }
+        }
+      }
+
+      & > div {
+        display: grid;
+        background-color: var(--color-base-150);
+        transition: 0.1s background-color;
+        justify-content: center;
+        overflow-y: auto;
+        padding: 2rem;
+
+        &:empty {
+          display: none;
+        }
+      }
+    }
+
+    & > #navbar {
+      display: grid;
+      place-items: center;
+      border-top: var(--border-style);
+      grid-template-columns: 5rem 1fr 5rem;
+
+      @media (width >= 60rem) {
+        display: none;
+      }
+    }
+  }
+</style>
