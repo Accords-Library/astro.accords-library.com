@@ -39,17 +39,67 @@ const themeColors = parseCookie(
   </head>
 
   <body class={themeColors}>
+    <div id="turbo-progress-bar" data-turbo-permanent></div>
     <slot />
   </body>
 </html>
 
-<script>
-  Turbo.setProgressBarDelay(0);
-</script>
-
 {
   /* ------------------------------------------- CSS -------------------------------------------- */
 }
+
+<style>
+  #turbo-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background-color: var(--color-base-600);
+    z-index: 9999;
+    opacity: 0;
+    touch-action: none;
+    pointer-events: none;
+    width: 0;
+    transition: 0.2s opacity;
+    transition-delay: 0.3s;
+  }
+
+  @keyframes fill-bar {
+    0% {
+      width: 0%;
+    }
+    5% {
+      width: 50%;
+    }
+    30% {
+      width: 90%;
+    }
+    100% {
+      width: 100%;
+    }
+  }
+
+  #turbo-progress-bar.loading {
+    opacity: 1;
+    animation: fill-bar 30s;
+  }
+
+  #turbo-progress-bar.completed {
+    animation: hide-bar 0.5s;
+  }
+
+  @keyframes hide-bar {
+    from {
+      opacity: 1;
+      width: 100%;
+    }
+    to {
+      opacity: 0;
+      width: 100%;
+    }
+  }
+</style>
 
 <style is:global>
   /* RESET */
@@ -389,20 +439,6 @@ const themeColors = parseCookie(
     }
   }
 
-  .turbo-progress-bar {
-    position: fixed;
-    display: block;
-    top: 0;
-    left: 0;
-    height: 5px;
-    background-color: #b07751;
-    z-index: 2147483647;
-    transition:
-      width 1000ms ease-out,
-      opacity 500ms 500ms ease-in;
-    transform: translate3d(0, 0, 0);
-  }
-
   .when-no-js {
     display: none;
   }
@@ -413,3 +449,37 @@ const themeColors = parseCookie(
     --font-angelic: "Angelic Agrippa", serif;
   }
 </style>
+
+{
+  /* -------------------------------------------- JS -------------------------------------------- */
+}
+
+<script>
+  import { Elementos } from "utils/Elementos";
+  import { observable } from "utils/micro-observables";
+  import { onRequestEnd, onRequestStart, onLoad } from "utils/turbo";
+
+  onLoad(() => {
+    const progressBar = new Elementos("#turbo-progress-bar");
+    const isLoading = observable(false);
+    const isCompleted = observable(false);
+
+    progressBar.setClass("loading", isLoading);
+    progressBar.setClass("completed", isCompleted);
+
+    let requestStartTime = 0;
+
+    onRequestStart(() => {
+      isLoading.set(true);
+      isCompleted.set(false);
+      requestStartTime = Date.now();
+    });
+
+    onRequestEnd(() => {
+      isLoading.set(false);
+      if (Date.now() - requestStartTime > 500) {
+        isCompleted.set(true);
+      }
+    });
+  });
+</script>
