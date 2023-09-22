@@ -1,12 +1,17 @@
 ---
 import { Icon } from "astro-icon/components";
 import { getLocalizedUrl } from "utils/urls";
-import NavOption from "pages/_components/NavOption.astro";
 import HorizontalLine from "pages/_components/HorizontalLine.astro";
 import ReduceToggleButton from "./ReduceToggleButton.astro";
 import ThemeToggleButton from "./ThemeToggleButton.astro";
+import NavOption from "pages/_components/NavOption.astro";
+
+interface Props {
+  isReduced?: boolean;
+}
 
 const { locale = "en" } = Astro.params;
+const { isReduced = false } = Astro.props;
 ---
 
 {
@@ -21,10 +26,10 @@ const { locale = "en" } = Astro.params;
   <Icon name="accords" />
 </a>
 
-<p id="title">Accord’s Library</p>
+<p id="title" class:list={{ hidden: isReduced }}>Accord’s Library</p>
 
-<div id="buttons">
-  <ReduceToggleButton icon="material-symbols:chevron-left-rounded" />
+<div id="buttons" class:list={["when-js", { reduced: isReduced }]}>
+  <ReduceToggleButton icon={isReduced ? "material-symbols:chevron-right": "material-symbols:chevron-left"} />
   <ThemeToggleButton />
 </div>
 
@@ -35,6 +40,7 @@ const { locale = "en" } = Astro.params;
   icon="material-symbols:auto-stories"
   title="Library"
   subtitle="Browse all physical and digital media"
+  mode={isReduced ? "iconOnly" : "default"}
 />
 
 <NavOption
@@ -42,6 +48,7 @@ const { locale = "en" } = Astro.params;
   icon="material-symbols:workspaces"
   title="Content"
   subtitle="Explore all content and filter by type or category"
+  mode={isReduced ? "iconOnly" : "default"}
 />
 
 <NavOption
@@ -49,6 +56,7 @@ const { locale = "en" } = Astro.params;
   icon="material-symbols:travel-explore"
   title="Wiki"
   subtitle="An encyclopedia for everything related to DrakeNieR"
+  mode={isReduced ? "iconOnly" : "default"}
 />
 
 <NavOption
@@ -56,45 +64,64 @@ const { locale = "en" } = Astro.params;
   icon="material-symbols:schedule"
   title="Chronicles"
   subtitle="Experience all events and content in chronological order"
+  mode={isReduced ? "iconOnly" : "default"}
 />
 
 <HorizontalLine />
 
-<NavOption href="/news" icon="material-symbols:newspaper" title="News" />
+<NavOption
+  href="/news"
+  icon="material-symbols:newspaper"
+  title="News"
+  mode={isReduced ? "iconOnly" : "default"}
+/>
 
 <NavOption
   href="https://gallery.accords-library.com/posts/"
   icon="material-symbols:perm-media"
   title="Gallery"
+  mode={isReduced ? "iconOnly" : "default"}
 />
 
-<NavOption href="/archives" icon="material-symbols:save" title="Archives" />
+<NavOption
+  href="/archives"
+  icon="material-symbols:save"
+  title="Archives"
+  mode={isReduced ? "iconOnly" : "default"}
+/>
 
-<NavOption href="/about-us" icon="material-symbols:info" title="About us" />
+<NavOption
+  href="/about-us"
+  icon="material-symbols:info"
+  title="About us"
+  mode={isReduced ? "iconOnly" : "default"}
+/>
 
-<HorizontalLine />
+<div class:list={{ hidden: isReduced }}>
+  <HorizontalLine />
 
-<p>
-  This website’s content is made available under <a
-    href="https://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA</a
-  > unless otherwise noted.
-</p>
+  <p>
+    This website’s content is made available under <a
+      href="https://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA</a
+    > unless otherwise noted.
+  </p>
 
-<div id="common-creative">
-  <Icon name="creative-commons-brands" />
-  <Icon name="creative-commons-by-brands" />
-  <Icon name="creative-commons-sa-brands" />
-</div>
+  <div id="common-creative">
+    <Icon name="creative-commons-brands" />
+    <Icon name="creative-commons-by-brands" />
+    <Icon name="creative-commons-sa-brands" />
+  </div>
 
-<p>
-  Accord’s Library is not affiliated with or endorsed by SQUARE ENIX CO. LTD.
-  All game assets and promotional materials belongs to © SQUARE ENIX CO. LTD.
-</p>
+  <p>
+    Accord’s Library is not affiliated with or endorsed by SQUARE ENIX CO. LTD.
+    All game assets and promotional materials belongs to © SQUARE ENIX CO. LTD.
+  </p>
 
-<div id="social-links">
-  <Icon name="github-brands" />
-  <Icon name="x-brands" />
-  <Icon name="discord-brands" />
+  <div id="social-links">
+    <Icon name="github-brands" />
+    <Icon name="x-brands" />
+    <Icon name="discord-brands" />
+  </div>
 </div>
 
 {
@@ -102,6 +129,10 @@ const { locale = "en" } = Astro.params;
 }
 
 <style>
+  .hidden {
+    display: none;
+  }
+
   #title {
     font-family: var(--font-headers);
     font-size: 1.875rem;
@@ -130,6 +161,15 @@ const { locale = "en" } = Astro.params;
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
+
+    &.reduced {
+      flex-direction: column;
+    }
+
+    & > #theme-toggle.dark > .when-light,
+    & > #theme-toggle.light > .when-dark {
+      display: none;
+    }
   }
 
   #common-creative {
@@ -144,10 +184,6 @@ const { locale = "en" } = Astro.params;
     }
   }
 
-  p {
-    text-align: center;
-  }
-
   #social-links {
     display: grid;
     grid-auto-flow: column;
@@ -160,3 +196,35 @@ const { locale = "en" } = Astro.params;
     }
   }
 </style>
+
+{
+  /* -------------------------------------------- JS -------------------------------------------- */
+}
+
+<script>
+  import tippy, { createSingleton } from "tippy.js";
+  import { onLoad } from "utils/turbo";
+
+  onLoad(() => {
+    createSingleton(
+      tippy("#menu-panel > .when-reduced > [data-tippy-template]", {
+        content: (reference) => {
+          const templateQuery = reference.getAttribute("data-tippy-template")!;
+          const template = reference.querySelector(templateQuery)!;
+          const container = document.createElement("div");
+          container.append(template.cloneNode(true));
+          container.style.fontSize = "90%";
+          return container;
+        },
+      }),
+      {
+        allowHTML: true,
+        placement: "right",
+        delay: 250,
+        moveTransition: "transform 0.2s ease",
+        maxWidth: "18rem",
+        inertia: true,
+      }
+    );
+  });
+</script>

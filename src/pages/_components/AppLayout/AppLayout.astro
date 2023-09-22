@@ -1,10 +1,9 @@
 ---
 import Html from "pages/_components/Html.astro";
-import MenuPanel from "./components/MenuPanel.astro";
 import Navbar from "./components/Navbar.astro";
-import MenuPanelReduced from "./components/MenuPanelReduced.astro";
 import { parseCookie } from "utils/astro";
 import { CookieNames } from "utils/cookies";
+import MenuPanel from "./components/MenuPanel.astro";
 
 interface Props {
   title: string;
@@ -35,7 +34,7 @@ const isMenuPanelReduced = parseCookie<boolean>(
       class:list={["texture-dots", { reduced: isMenuPanelReduced }]}
     >
       <div class="when-reduced">
-        <MenuPanelReduced />
+        <MenuPanel isReduced />
       </div>
       <div class="when-not-reduced">
         <MenuPanel />
@@ -131,8 +130,7 @@ const isMenuPanelReduced = parseCookie<boolean>(
           transition: 0.2s width;
 
           &.reduced {
-            width: auto;
-            padding: 1rem;
+            width: 6rem;
           }
 
           &.reduced > .when-not-reduced,

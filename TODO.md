@@ -1,2 +1,3 @@
-- [ ] Check why I'm getting NS_BINDING_ABORTED on fonts when fetched in the network browser dev tool tab
-- [ ] Add a background when opening menus in mobile mode
+- Check why I'm getting NS_BINDING_ABORTED on fonts when fetched in the network browser dev tool tab
+- Add a background when opening menus in mobile mode
+- Strong is not bold...

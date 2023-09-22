@@ -12,25 +12,29 @@ const { title, showSubPanel } = Astro.props;
   /* ------------------------------------------- HTML ------------------------------------------- */
 }
 
-<button id="toggle-menu-panel">
-  <Icon
-    class="when-off"
-    name="material-symbols:menu-rounded"
-    width={24}
-    height={24}
-  />
-  <Icon
-    class="when-on"
-    name="material-symbols:close-rounded"
-    width={24}
-    height={24}
-  />
-</button>
+<div>
+  <button id="toggle-menu-panel" class="when-js">
+    <Icon
+      class="when-off"
+      name="material-symbols:menu-rounded"
+      width={24}
+      height={24}
+    />
+    <Icon
+      class="when-on"
+      name="material-symbols:close-rounded"
+      width={24}
+      height={24}
+    />
+  </button>
+</div>
+
 <p>{title}</p>
+
 <div>
   {
     showSubPanel && (
-      <button id="toggle-sub-panel">
+      <button id="toggle-sub-panel" class="when-js">
         <Icon
           class="when-off"
           name="material-symbols:tune-rounded"

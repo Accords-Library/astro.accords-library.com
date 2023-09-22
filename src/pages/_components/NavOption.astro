@@ -6,10 +6,11 @@ interface Props {
   icon?: string;
   title: string | null | undefined;
   subtitle?: string | null | undefined;
+  mode?: "iconOnly" | "default";
 }
 
 const { locale } = Astro.params;
-const { href, icon, title, subtitle } = Astro.props;
+const { href, icon, title, subtitle, mode = "default" } = Astro.props;
 
 const currentPath = new URL(Astro.request.url).pathname.slice(
   `/${locale}`.length
@@ -23,12 +24,12 @@ const isActive = currentPath.startsWith(href);
 }
 
 <a
-  id="component"
   href={getLocalizedUrl(href, locale)}
   class:list={{ active: isActive }}
+  data-tippy-template="#text-content"
 >
   {icon && <Icon name={icon} />}
-  <div id="text-content">
+  <div id="text-content" class:list={{ hidden: mode === "iconOnly" }}>
     <p class="font-headers">
       {title}
     </p>
@@ -41,7 +42,7 @@ const isActive = currentPath.startsWith(href);
 }
 
 <style>
-  #component {
+  a {
     padding: 1rem;
     color: inherit;
     text-decoration: inherit;
@@ -71,12 +72,8 @@ const isActive = currentPath.startsWith(href);
       flex-shrink: 0;
     }
 
-    @container (max-width: 15rem) {
-      width: 3.5rem;
-
-      & > #text-content {
-        display: none;
-      }
+    & > #text-content.hidden {
+      display: none;
     }
   }
 
