@@ -24,22 +24,18 @@ const { icon } = Astro.props;
   import { Elementos } from "utils/Elementos";
   import { CookieNames } from "utils/cookies";
   import { observableWithPersistence } from "utils/micro-observables";
-  import { onLoad } from "utils/turbo";
 
-  onLoad(() => {
-    const toggleReducedButton = new Elementos("#reduce-toggle");
-    const menuPanel = new Elementos("#menu-panel");
+  const toggleReducedButton = new Elementos("#reduce-toggle");
+  const menuPanel = new Elementos("#menu-panel");
 
-    const isReduced = observableWithPersistence(
-      CookieNames.MENU_PANEL_REDUCED,
-      false
-    );
+  const isReduced = observableWithPersistence(
+    CookieNames.MENU_PANEL_REDUCED,
+    false
+  );
 
-    toggleReducedButton.onClick(() => {
-      isReduced.update((oldValue) => !oldValue);
-      Turbo.cache.clear();
-    });
-
-    menuPanel.setClass("reduced", isReduced);
+  toggleReducedButton.onClick(() => {
+    isReduced.update((oldValue) => !oldValue);
   });
+
+  menuPanel.setClass("reduced", isReduced);
 </script>

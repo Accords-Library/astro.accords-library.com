@@ -50,38 +50,29 @@ const themeColors = parseCookie<string>(
   import { Elementos } from "utils/Elementos";
   import { CookieNames } from "utils/cookies";
   import { observableWithPersistence } from "utils/micro-observables";
-  import { onLoad } from "utils/turbo";
 
-  onLoad(() => {
-    const body = new Elementos("body");
-    const themeToggleButton = new Elementos("#theme-toggle");
+  const body = new Elementos("body");
+  const themeToggleButton = new Elementos("#theme-toggle");
 
-    const themeColor = observableWithPersistence(
-      CookieNames.THEME_COLOR,
-      "theme-color-light"
-    );
+  const themeColor = observableWithPersistence(
+    CookieNames.THEME_COLOR,
+    "theme-color-light"
+  );
 
-    const isDarkMode = themeColor.select(
-      (value) => value === "theme-color-dark"
-    );
+  const isDarkMode = themeColor.select((value) => value === "theme-color-dark");
 
-    themeToggleButton.onClick(() => {
-      themeColor.update((oldValue) =>
-        oldValue === "theme-color-light"
-          ? "theme-color-dark"
-          : "theme-color-light"
-      );
-      Turbo.cache.clear();
-    });
-
-    themeToggleButton.setClass(
-      { ifFalse: "light", ifTrue: "dark" },
-      isDarkMode
-    );
-
-    body.setClass(
-      { ifFalse: "theme-color-light", ifTrue: "theme-color-dark" },
-      isDarkMode
+  themeToggleButton.onClick(() => {
+    themeColor.update((oldValue) =>
+      oldValue === "theme-color-light"
+        ? "theme-color-dark"
+        : "theme-color-light"
     );
   });
+
+  themeToggleButton.setClass({ ifFalse: "light", ifTrue: "dark" }, isDarkMode);
+
+  body.setClass(
+    { ifFalse: "theme-color-light", ifTrue: "theme-color-dark" },
+    isDarkMode
+  );
 </script>

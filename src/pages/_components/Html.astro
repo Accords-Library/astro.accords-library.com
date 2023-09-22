@@ -22,7 +22,6 @@ const themeColors = parseCookie(
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <title>{title}</title>
-    <script is:inline src="/js/turbo.es2017-umd.js" async defer></script>
     <link href="/css/sanitize.min.css" rel="stylesheet" />
     <link href="/css/tippy.css" rel="stylesheet" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -42,10 +41,6 @@ const themeColors = parseCookie(
     <slot />
   </body>
 </html>
-
-<script>
-  Turbo.setProgressBarDelay(0);
-</script>
 
 {
   /* ------------------------------------------- CSS -------------------------------------------- */
@@ -387,20 +382,6 @@ const themeColors = parseCookie(
         0 10px 15px -3px var(--color-base-1000),
         0 0 6px -4px var(--color-base-1000);
     }
-  }
-
-  .turbo-progress-bar {
-    position: fixed;
-    display: block;
-    top: 0;
-    left: 0;
-    height: 5px;
-    background-color: #b07751;
-    z-index: 2147483647;
-    transition:
-      width 1000ms ease-out,
-      opacity 500ms 500ms ease-in;
-    transform: translate3d(0, 0, 0);
   }
 
   .when-no-js {

@@ -29,7 +29,11 @@ const { isReduced = false } = Astro.props;
 <p id="title" class:list={{ hidden: isReduced }}>Accord’s Library</p>
 
 <div id="buttons" class:list={["when-js", { reduced: isReduced }]}>
-  <ReduceToggleButton icon={isReduced ? "material-symbols:chevron-right": "material-symbols:chevron-left"} />
+  <ReduceToggleButton
+    icon={isReduced
+      ? "material-symbols:chevron-right"
+      : "material-symbols:chevron-left"}
+  />
   <ThemeToggleButton />
 </div>
 
@@ -203,28 +207,24 @@ const { isReduced = false } = Astro.props;
 
 <script>
   import tippy, { createSingleton } from "tippy.js";
-  import { onLoad } from "utils/turbo";
-
-  onLoad(() => {
-    createSingleton(
-      tippy("#menu-panel > .when-reduced > [data-tippy-template]", {
-        content: (reference) => {
-          const templateQuery = reference.getAttribute("data-tippy-template")!;
-          const template = reference.querySelector(templateQuery)!;
-          const container = document.createElement("div");
-          container.append(template.cloneNode(true));
-          container.style.fontSize = "90%";
-          return container;
-        },
-      }),
-      {
-        allowHTML: true,
-        placement: "right",
-        delay: 250,
-        moveTransition: "transform 0.2s ease",
-        maxWidth: "18rem",
-        inertia: true,
-      }
-    );
-  });
+  createSingleton(
+    tippy("#menu-panel > .when-reduced > [data-tippy-template]", {
+      content: (reference) => {
+        const templateQuery = reference.getAttribute("data-tippy-template")!;
+        const template = reference.querySelector(templateQuery)!;
+        const container = document.createElement("div");
+        container.append(template.cloneNode(true));
+        container.style.fontSize = "90%";
+        return container;
+      },
+    }),
+    {
+      allowHTML: true,
+      placement: "right",
+      delay: 250,
+      moveTransition: "transform 0.2s ease",
+      maxWidth: "18rem",
+      inertia: true,
+    }
+  );
 </script>
