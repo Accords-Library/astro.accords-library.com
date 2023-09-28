@@ -18,11 +18,7 @@ const { isReduced = false } = Astro.props;
   /* ------------------------------------------- HTML ------------------------------------------- */
 }
 
-<a
-  id="accords-logo"
-  data-turbo-confirm="Do you want to leave this page?"
-  href={getLocalizedUrl("/", locale)}
->
+<a id="accords-logo" href={getLocalizedUrl("/", locale)}>
   <Icon name="accords" />
 </a>
 
@@ -122,9 +118,11 @@ const { isReduced = false } = Astro.props;
   </p>
 
   <div id="social-links">
-    <Icon name="github-brands" />
-    <Icon name="x-brands" />
-    <Icon name="discord-brands" />
+    <a href="https://github.com/accords-Library"
+      ><Icon name="github-brands" /></a
+    >
+    <a href="https://twitter.com/AccordsLibrary"><Icon name="x-brands" /></a>
+    <a href="/discord"><Icon name="discord-brands" /></a>
   </div>
 </div>
 
@@ -194,7 +192,7 @@ const { isReduced = false } = Astro.props;
     place-items: center;
     gap: 2rem;
 
-    & > svg {
+    & > a > svg {
       width: 40px;
       height: 40px;
     }

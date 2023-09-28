@@ -12,15 +12,12 @@
   },
   "dependencies": {
     "@astrojs/node": "^6.0.0",
-    "@hotwired/turbo": "^7.3.0",
     "accept-language": "^3.0.18",
     "astro": "^3.0.3",
     "astro-icon": "next",
     "hono": "^3.5.7",
-    "htmx.org": "^1.9.5",
     "js-cookie": "^3.0.5",
     "node-cache": "^5.1.2",
-    "sanitize.css": "^13.0.0",
     "tippy.js": "^6.3.7"
   },
   "devDependencies": {

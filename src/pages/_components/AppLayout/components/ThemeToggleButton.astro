@@ -1,7 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
-import { parseCookie } from "utils/astro";
-import { CookieNames } from "utils/cookies";
+import { CookieNames, parseCookie } from "utils/cookies";
 
 const themeColors = parseCookie<string>(
   Astro.cookies.get(CookieNames.THEME_COLOR),
