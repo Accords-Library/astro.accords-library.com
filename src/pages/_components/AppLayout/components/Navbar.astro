@@ -70,28 +70,25 @@ const { title, showSubPanel } = Astro.props;
 <script>
   import { Elementos } from "utils/Elementos";
   import { observable } from "utils/micro-observables";
-  import { onLoad } from "utils/turbo";
 
-  onLoad(() => {
-    const isMenuPanelOpened = observable(false);
-    const menuPanel = new Elementos("#menu-panel");
-    const menuPanelToggle = new Elementos("#toggle-menu-panel");
+  const isMenuPanelOpened = observable(false);
+  const menuPanel = new Elementos("#menu-panel");
+  const menuPanelToggle = new Elementos("#toggle-menu-panel");
 
-    menuPanelToggle.onClick(() => {
-      isMenuPanelOpened.update((current) => !current);
-      isSubPanelOpened.set(false);
-    });
-    menuPanel.setClass("opened", isMenuPanelOpened);
-    menuPanelToggle.setClass("on", isMenuPanelOpened);
-
-    const isSubPanelOpened = observable(false);
-    const subPanel = new Elementos("#sub-panel");
-    const subPanelToggle = new Elementos("#toggle-sub-panel");
-    subPanelToggle.onClick(() => {
-      isSubPanelOpened.update((current) => !current);
-      isMenuPanelOpened.set(false);
-    });
-    subPanel.setClass("opened", isSubPanelOpened);
-    subPanelToggle.setClass("on", isSubPanelOpened);
+  menuPanelToggle.onClick(() => {
+    isMenuPanelOpened.update((current) => !current);
+    isSubPanelOpened.set(false);
   });
+  menuPanel.setClass("opened", isMenuPanelOpened);
+  menuPanelToggle.setClass("on", isMenuPanelOpened);
+
+  const isSubPanelOpened = observable(false);
+  const subPanel = new Elementos("#sub-panel");
+  const subPanelToggle = new Elementos("#toggle-sub-panel");
+  subPanelToggle.onClick(() => {
+    isSubPanelOpened.update((current) => !current);
+    isMenuPanelOpened.set(false);
+  });
+  subPanel.setClass("opened", isSubPanelOpened);
+  subPanelToggle.setClass("on", isSubPanelOpened);
 </script>

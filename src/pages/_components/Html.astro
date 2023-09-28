@@ -1,6 +1,5 @@
 ---
-import { parseCookie } from "utils/astro";
-import { CookieNames } from "utils/cookies";
+import { CookieNames, parseCookie } from "utils/cookies";
 
 interface Props {
   title: string;
@@ -22,7 +21,6 @@ const themeColors = parseCookie(
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <title>{title}</title>
-    <script is:inline src="/js/turbo.es2017-umd.js" async defer></script>
     <link href="/css/sanitize.min.css" rel="stylesheet" />
     <link href="/css/tippy.css" rel="stylesheet" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -297,7 +295,7 @@ const themeColors = parseCookie(
   @font-face {
     font-family: "Vollkorn";
     src: url("/fonts/Vollkorn-Bold.woff2") format("woff2");
-    font-weight: bold;
+    font-weight: 700;
     font-style: normal;
     font-display: swap;
   }
@@ -305,7 +303,7 @@ const themeColors = parseCookie(
   @font-face {
     font-family: "Noto Sans";
     src: url("/fonts/NotoSans-Medium.woff2") format("woff2");
-    font-weight: medium;
+    font-weight: 600;
     font-style: normal;
     font-display: swap;
   }
@@ -313,7 +311,7 @@ const themeColors = parseCookie(
   @font-face {
     font-family: "Noto Sans";
     src: url("/fonts/NotoSans-Bold.woff2") format("woff2");
-    font-weight: bold;
+    font-weight: 700;
     font-style: normal;
     font-display: swap;
   }
@@ -321,7 +319,7 @@ const themeColors = parseCookie(
   @font-face {
     font-family: "Angelic Agrippa";
     src: url("/fonts/AngelicAgrippa-Regular.woff2") format("woff2");
-    font-weight: normal;
+    font-weight: 500;
     font-style: normal;
     font-display: swap;
   }
@@ -449,37 +447,3 @@ const themeColors = parseCookie(
     --font-angelic: "Angelic Agrippa", serif;
   }
 </style>
-
-{
-  /* -------------------------------------------- JS -------------------------------------------- */
-}
-
-<script>
-  import { Elementos } from "utils/Elementos";
-  import { observable } from "utils/micro-observables";
-  import { onRequestEnd, onRequestStart, onLoad } from "utils/turbo";
-
-  onLoad(() => {
-    const progressBar = new Elementos("#turbo-progress-bar");
-    const isLoading = observable(false);
-    const isCompleted = observable(false);
-
-    progressBar.setClass("loading", isLoading);
-    progressBar.setClass("completed", isCompleted);
-
-    let requestStartTime = 0;
-
-    onRequestStart(() => {
-      isLoading.set(true);
-      isCompleted.set(false);
-      requestStartTime = Date.now();
-    });
-
-    onRequestEnd(() => {
-      isLoading.set(false);
-      if (Date.now() - requestStartTime > 500) {
-        isCompleted.set(true);
-      }
-    });
-  });
-</script>
